@@ -2,7 +2,7 @@
 param location string = resourceGroup().location
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
-  name: 'stoaccountbicepdemo'
+  name: 'stoaccountbicepdemo${uniqueString(resourceGroup().id)}'
   location: location
   sku: {
     name: 'Standard_LRS'
@@ -11,7 +11,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
 }
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
-  name: 'appServicePlan'
+  name: 'appServicePlan${uniqueString(resourceGroup().id)}'
   location: location
   sku: {
     name: 'F1'
@@ -19,7 +19,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
 }
 
 resource webApplication 'Microsoft.Web/sites@2021-03-01' = {
-  name: 'webAppBicepDemo'
+  name: 'webAppBicepDemo${uniqueString(resourceGroup().id)}'
   location: location
   properties: {
     serverFarmId: appServicePlan.id
