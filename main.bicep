@@ -9,7 +9,8 @@ param location string = resourceGroup().location
 param environmentType string
 
 var storageAccountSkuName = (environmentType == 'prod') ? 'Standard_GRS' : 'Standard_LRS'
-var appServicePlanSkuName = (environmentType == 'prod') ? 'P2V3' : 'F1'
+var appServicePlanName = 'appServicePlan${uniqueString(resourceGroup().id)}'
+var webAppName = 'webAppBicepDemo${uniqueString(resourceGroup().id)}'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: 'stoaccbicep${uniqueString(resourceGroup().id)}'
@@ -20,19 +21,14 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   kind: 'StorageV2'
 }
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2021-03-01' = {
-  name: 'appServicePlan${uniqueString(resourceGroup().id)}'
-  location: location
-  sku: {
-    name: appServicePlanSkuName
+module appService 'modules/appService.bicep' = {
+  name: 'appService'
+  params: {
+    appServicePlanName: appServicePlanName
+    environmentType: environmentType
+    location: location
+    webAppName: webAppName
   }
 }
 
-resource webApplication 'Microsoft.Web/sites@2021-03-01' = {
-  name: 'webAppBicepDemo${uniqueString(resourceGroup().id)}'
-  location: location
-  properties: {
-    serverFarmId: appServicePlan.id
-    httpsOnly: true
-  }
-}
+output appServiceAppHostName string = appService.outputs.webAppNameHostName
