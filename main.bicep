@@ -12,7 +12,7 @@ var storageAccountSkuName = (environmentType == 'prod') ? 'Standard_GRS' : 'Stan
 var appServicePlanSkuName = (environmentType == 'prod') ? 'P2V3' : 'F1'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
-  name: 'stoaccountbicepdemo${uniqueString(resourceGroup().id)}'
+  name: 'stoaccbicep${uniqueString(resourceGroup().id)}'
   location: location
   sku: {
     name: storageAccountSkuName
