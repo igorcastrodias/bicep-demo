@@ -1,4 +1,5 @@
 param cosmosDBAccountName string = 'toyrnd-${uniqueString(resourceGroup().id)}'
+@minValue(400)
 param cosmosDBDatabaseThroughput int = 400
 param storageAccountName string = 'stoaccbiceplolxvgwk57tpo'
 param location string = resourceGroup().location
